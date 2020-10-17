@@ -34,8 +34,8 @@ public class Main {
         String first = args[0];
 
         switch (first) {
-            case TO -> to(args);
-            case FROM -> from(args);
+            case TO -> toOther(args, true);
+            case FROM -> toJsin(args, true);
             default -> LOGGER.info(
                     """
                             Offers several commands for using and manipulating the jsin image format.
@@ -63,14 +63,17 @@ public class Main {
         }
     }
 
-    public static boolean to(String[] args) throws IOException {
-        if (args.length != 4) {
-            LOGGER.warning(
-                    """
-                            2 arguments expected.
-                                Usage: jsin to [format] [input file]
-                                Notes: input file can be relative or absolute.
-                            """);
+    public static boolean toOther(String[] args, boolean logWarnings) throws IOException {
+        if (args.length != 3) {
+            if(logWarnings) {
+                LOGGER.warning(
+                        """
+                                2 arguments expected.
+                                    Usage: jsin to [format] [input file]
+                                    Notes: input file can be relative or absolute.
+                                """);
+            }
+
             return false;
         }
 
@@ -79,15 +82,26 @@ public class Main {
 
         // Verify format extension
         if (!SUPPORTED_IMAGE_FORMATS.contains(format)) {
-            LOGGER.warning(String.format("%s file format not supported.\n   Supported file types: %s", format, SUPPORTED_IMAGE_FORMATS.toArray().toString()));
+            if(logWarnings) {
+                LOGGER.warning(String.format("%s file format not supported.\n   Supported file types: %s", format, SUPPORTED_IMAGE_FORMATS.toArray().toString()));
+            }
+
             return false;
+        }
+
+        // Tack .jsin ending onto input if it was not specified
+        if(!input.endsWith(".jsin")) {
+            input = input + ".jsin";
         }
 
         // Verify input
         Path attemptPath = Paths.get(input);
         File attemptFile = attemptPath.toFile();
         if (!attemptFile.exists() || !attemptFile.isFile()) {
-            LOGGER.warning(String.format("The file %s does not exist.", attemptPath.toString()));
+            if(logWarnings) {
+                LOGGER.warning(String.format("The file %s does not exist.", attemptPath.toString()));
+            }
+
             return false;
         }
 
@@ -97,15 +111,18 @@ public class Main {
         return true;
     }
 
-    public static void from(String[] args) throws IOException {
-        if (args.length < 2) {
-            LOGGER.warning(
-                    """
-                            1 argument expected.
-                                Usage: jsin from [input file]
-                                Notes: input file can be relative or absolute.
-                            """);
-            return;
+    public static boolean toJsin(String[] args, boolean logWarnings) throws IOException {
+        if (args.length != 2) {
+            if(logWarnings) {
+                LOGGER.warning(
+                        """
+                                1 argument expected.
+                                    Usage: jsin from [input file]
+                                    Notes: input file can be relative or absolute.
+                                """);
+            }
+
+            return false;
         }
 
         String input = args[1];
@@ -114,13 +131,17 @@ public class Main {
         Path attemptPath = Paths.get(input);
         File attemptFile = attemptPath.toFile();
         if (!attemptFile.exists() || !attemptFile.isFile()) {
-            LOGGER.warning(String.format("The file %s does not exist.", attemptPath.toString()));
-            return;
+            if(logWarnings) {
+                LOGGER.warning(String.format("The file %s does not exist.", attemptPath.toString()));
+            }
+
+            return false;
         }
 
         // .jsin -> .png
         BufferedImage in = ImageIO.read(attemptFile);
         JSINImage image = new JSINImage(in);
         jsin.save(image, attemptFile.getParentFile().toPath(), attemptFile.getName().substring(0, attemptFile.getName().lastIndexOf(".")));
+        return true;
     }
 }

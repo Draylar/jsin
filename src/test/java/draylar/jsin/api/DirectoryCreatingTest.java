@@ -1,5 +1,6 @@
 package draylar.jsin.api;
 
+import draylar.jsin.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -41,7 +42,29 @@ public class DirectoryCreatingTest {
     }
 
     @AfterAll
-    public void afterTests() throws IOException {
-        Files.delete(OUTPUT_DIRECTORY);
+    public void afterTests() {
+        deleteDirectory(OUTPUT_DIRECTORY.toFile());
+    }
+
+    /**
+     * Deletes the specified directory, including any files or directories inside it.
+     *
+     * @param file  directory to delete files from
+     * @throws      UnsupportedOperationException if the given {@link File} is not a directory
+     */
+    private void deleteDirectory(File file) {
+        if(file == null || !file.isDirectory()) {
+            throw new UnsupportedOperationException(String.format("%s is not a directory!", file.toString()));
+        } else {
+            for (File f : file.listFiles()) {
+                if (!f.isDirectory()) {
+                    f.delete();
+                } else {
+                    deleteDirectory(f);
+                }
+            }
+        }
+
+        file.delete();
     }
 }
