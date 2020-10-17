@@ -1,4 +1,4 @@
-package draylar.jsin;
+package draylar.jsin.api;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

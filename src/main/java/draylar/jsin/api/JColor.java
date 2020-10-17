@@ -3,7 +3,7 @@ package draylar.jsin.api;
 import java.awt.*;
 
 /**
- * Represents a single color value.
+ * Represents a color value with channels ranging from 0.0 - 1.0.
  */
 public class JColor {
 

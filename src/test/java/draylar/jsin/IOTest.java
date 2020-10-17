@@ -1,10 +1,10 @@
 package draylar.jsin;
 
-import draylar.jsin.api.DirectoryCreatingTest;
 import draylar.jsin.api.JColor;
 import draylar.jsin.api.JSIN;
 import draylar.jsin.api.JSINImage;
-import org.junit.jupiter.api.BeforeAll;
+import draylar.jsin.api.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 
@@ -21,18 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class GenericTests extends DirectoryCreatingTest {
+public class IOTest extends DirectoryCreatingTest {
 
-    private static final Path OUTPUT_DIRECTORY = Paths.get(new File("").getAbsolutePath() + "\\" + "test_out");
     private static final String TEST_IMAGE_URL = "valiphotos_fall_photograph.png";
     private static final Random RANDOM = new Random();
 
-    public GenericTests() {
+    public IOTest() {
         super("Generic");
     }
 
-    // Attempt to convert a .png file to the JSIN file class, and then checks that the conversion worked by comparing random pixels in both objects.
     @Test
+    @DisplayName("BufferedImage and a JSINImage constructed from it should have the same content.")
     public void testConversion() {
         BufferedImage pngImage = FileUtils.readImage(TEST_IMAGE_URL);
         JSINImage jsinImage = new JSINImage(pngImage);
@@ -48,9 +46,9 @@ public class GenericTests extends DirectoryCreatingTest {
         }
     }
 
-    // PNG -> JSIN
     @Test
-    public void testToJSIN() throws IOException {
+    @DisplayName("A saved and re-read JSINImage should have the same contents as the original image.")
+    public void testSavingJSIN() throws IOException {
         JSIN jsin = new JSIN();
         BufferedImage pngImage = FileUtils.readImage(TEST_IMAGE_URL);
         JSINImage image = new JSINImage(pngImage);
@@ -67,9 +65,9 @@ public class GenericTests extends DirectoryCreatingTest {
         assertEquals(image, readImage);
     }
 
-    // JSIN -> PNG
     @Test
-    public void testToPNG() throws IOException {
+    @DisplayName("A .png created from a JSINImage should have the same contents when re-read.")
+    public void testSavingPNG() throws IOException {
         // Create simple JSIN image and save it
         JSIN jsin = new JSIN();
         JSINImage image = new JSINImage(1, 1);
@@ -93,7 +91,8 @@ public class GenericTests extends DirectoryCreatingTest {
     }
 
     @Test
-    public void testSave() throws IOException {
+    @DisplayName("A saved and re-read JSINImage should be identical to the original.")
+    public void testSaving() throws IOException {
         JSIN jsin = new JSIN();
         JSINImage image = new JSINImage(1, 1);
         image.setPixel(0, 0, JColor.from(Color.BLUE));

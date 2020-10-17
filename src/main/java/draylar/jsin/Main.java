@@ -12,13 +12,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Main {
 
     public static final Logger LOGGER = Logger.getLogger("Jsin");
+    public static final Scanner SCANNER = new Scanner(System.in);
     private static final String TO = "to";
     private static final String FROM = "from";
+    private static final String INTERACTIVE = "interactive";
     private static final List<String> SUPPORTED_IMAGE_FORMATS = Arrays.asList(ImageIO.getReaderFormatNames());
     private static final JSIN jsin = new JSIN();
 
@@ -31,6 +34,27 @@ public class Main {
      * @param args main command line arguments
      */
     public static void main(String[] args) throws IOException {
+        String first = args[0];
+
+        if (INTERACTIVE.equals(first)) {
+            LOGGER.info("Entering interactive mode. Enter commands as normal, or type \"quit\" to stop.");
+
+            do {
+                System.out.print(">> ");
+                String input = SCANNER.nextLine();
+                args = input.split(" ");
+
+                // Parse input if the user isn't trying to quit
+                if(!args[0].equals("quit")) {
+                    parse(args);
+                }
+            } while (!args[0].equals("quit"));
+        } else {
+            parse(args);
+        }
+    }
+
+    public static void parse(String[] args) throws IOException {
         String first = args[0];
 
         switch (first) {

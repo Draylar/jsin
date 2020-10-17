@@ -3,6 +3,7 @@ package draylar.jsin;
 import draylar.jsin.api.DirectoryCreatingTest;
 import draylar.jsin.api.JColor;
 import draylar.jsin.api.JSINImage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +16,9 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MainTests extends DirectoryCreatingTest {
+public class MainTest extends DirectoryCreatingTest {
 
-    public MainTests() {
+    public MainTest() {
         super("Main");
     }
 
@@ -32,7 +33,7 @@ public class MainTests extends DirectoryCreatingTest {
         jsin.save(jImage, OUTPUT_DIRECTORY, "other_argument");
 
         // Test arguments
-        assertFalse(Main.toOther(new String[] { "to", "png" }, false));
+        Assertions.assertFalse(Main.toOther(new String[] { "to", "png" }, false));
         assertFalse(Main.toOther(new String[] { "to" }, false));
         assertFalse(Main.toOther(new String[] { "to", "png", fileLocation, "hello" }, false));
         assertTrue(Main.toOther(new String[] { "to", "png", fileLocation }, false));

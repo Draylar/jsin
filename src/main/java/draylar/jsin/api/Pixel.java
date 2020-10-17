@@ -3,7 +3,7 @@ package draylar.jsin.api;
 import java.util.Objects;
 
 /**
- * Represents a pixel in an image with a position and color.
+ * Represents a pixel in any image with a position and color.
  */
 public class Pixel {
 
@@ -11,6 +11,13 @@ public class Pixel {
     private final int y;
     private final JColor color;
 
+    /**
+     * Primary constructor of {@link Pixel}.
+     *
+     * @param x      y-coordinate of this pixel
+     * @param y      x-coordinate of this pixel
+     * @param color  color of this pixel
+     */
     public Pixel(int x, int y, JColor color) {
         this.x = x;
         this.y = y;

@@ -1,19 +1,22 @@
 package draylar.jsin.api;
 
-import draylar.jsin.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Represents a test suite within a directory.
+ *
+ * <p>Each test needs a separate directory to avoid file naming conflicts between different tests.
+ * Test directories can be found inside /test_output while testss are live, but are deleted after tests run.
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DirectoryCreatingTest {
 
